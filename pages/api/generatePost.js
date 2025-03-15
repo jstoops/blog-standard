@@ -102,7 +102,9 @@ export default withApiAuthRequired(async function handler(req, res) {
       created: new Date(),
     });
 
-    res.status(200).json({ post: { postContent, title, metaDescription } });
+    console.log('POST: ', post);
+
+    res.status(200).json({ postId: post.insertedId });
   } catch (error) {
     console.error(error.response?.data ?? error.message);
     res.status(500).json({ error: error.response?.data ?? error.message });
