@@ -5,6 +5,7 @@ import { ObjectId } from 'mongodb';
 import Markdown from 'react-markdown';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHashtag } from '@fortawesome/free-solid-svg-icons';
+import { getAppProps } from '../../utils/getAppProps';
 
 export default function Post(props) {
   console.log('PROPS: ', props);
@@ -42,15 +43,16 @@ Post.getLayout = function getLayout(page, pageProps) {
 };
 
 export const getServerSideProps = withPageAuthRequired({
-  async getServerSideProps(context) {
-    const userSession = await getSession(context.req, context.res);
+  async getServerSideProps(ctx) {
+    const props = await getAppProps(ctx);
+    const userSession = await getSession(ctx.req, ctx.res);
     const client = await clientPromise;
     const db = client.db('blogstandard');
     const user = await db.collection('users').findOne({
       auth0Id: userSession.user.sub,
     });
     const post = await db.collection('posts').findOne({
-      _id: new ObjectId(context.params.postId),
+      _id: new ObjectId(ctx.params.postId),
       userId: user._id,
     });
 
@@ -69,6 +71,7 @@ export const getServerSideProps = withPageAuthRequired({
         title: post.title,
         metaDescription: post.metaDescription,
         keywords: post.keywords,
+        ...props,
       },
     };
   },
