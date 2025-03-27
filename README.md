@@ -2,7 +2,7 @@
 
 > Next JS & Open AI / GPT: Next-generation Next JS & AI apps using MongoDB, Auth0, and Stripe
 
-<img src="./frontend/public/images/screens.jpg">
+<img src="./public/screens.jpg">
 
 ## Features
 
